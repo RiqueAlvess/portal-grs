@@ -1,34 +1,16 @@
-[2025-04-02 09:11:42,918] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 09:47:42,613] ERROR - Erro inesperado durante login de henrique.siqueira@grsnucleo.com.br: When initializing mapper Mapper[Usuario(usuarios)], expression 'Empresa' failed to locate a name ('Empresa'). If this is a class name, consider adding this relationship() to the <class 'models.UsuariosSchema.Usuario'> class after both dependent classes have been defined.
-[2025-04-02 09:53:08,188] ERROR - Erro inesperado durante login de henrique.siqueira@grsnucleo.com.br: When initializing mapper Mapper[Usuario(usuarios)], expression 'Empresa' failed to locate a name ('Empresa'). If this is a class name, consider adding this relationship() to the <class 'models.UsuariosSchema.Usuario'> class after both dependent classes have been defined.
-[2025-04-02 09:56:19,111] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 09:56:34,963] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 09:58:17,477] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 09:58:17,632] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 09:58:17,688] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 09:58:17,853] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:03:01,722] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:03:01,842] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:03:13,788] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 10:03:13,926] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:03:13,993] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:03:14,141] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:11:09,090] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 10:11:09,226] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:11:09,278] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:11:09,418] WARNING - Falha na verificação de autenticação: 'LoginManager' object has no attribute '_verify_jwt'
-[2025-04-02 10:17:14,400] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 21:41:23,630] ERROR - Erro ao decodificar token: Signature has expired.
-[2025-04-02 21:41:23,631] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
-[2025-04-02 21:41:23,673] ERROR - Erro ao decodificar token: Signature has expired.
-[2025-04-02 21:41:23,673] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
-[2025-04-02 21:41:23,822] ERROR - Erro ao decodificar token: Signature has expired.
-[2025-04-02 21:41:23,822] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
-[2025-04-02 21:41:36,720] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
-[2025-04-02 22:13:34,755] ERROR - Erro ao decodificar token: Signature has expired.
-[2025-04-02 22:13:34,836] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
-[2025-04-02 22:13:34,900] ERROR - Erro ao decodificar token: Signature has expired.
-[2025-04-02 22:13:34,900] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
-[2025-04-02 22:13:36,266] ERROR - Erro ao decodificar token: Signature has expired.
-[2025-04-02 22:13:36,267] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
-[2025-04-02 22:13:44,140] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 10:44:22,972] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 10:44:22,972] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 10:44:22,972] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 10:44:22,972] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 10:44:23,022] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 10:44:23,022] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 10:44:23,022] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 10:44:23,022] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 10:44:23,164] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 10:44:23,164] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 10:44:23,164] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 10:44:23,164] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 10:44:33,267] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 10:44:33,267] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 11:03:34,294] INFO - Login bem-sucedido para: programador@grsnucleo.com.br
+[2025-04-03 11:03:34,294] INFO - Login bem-sucedido para: programador@grsnucleo.com.br

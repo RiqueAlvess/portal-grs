@@ -9,9 +9,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 
-# Importação dos routers
 from autenticacao.Login import router as login_router
 from autenticacao.Registro import router as register_router
+from src.admin.AdminRoutes import router as admin_router 
 
 load_dotenv()
 
@@ -32,6 +32,7 @@ app.add_middleware(
 
 app.include_router(login_router)
 app.include_router(register_router)
+app.include_router(admin_router) 
 
 @app.get("/")
 def root():

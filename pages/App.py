@@ -228,6 +228,32 @@ async def dashboard(request: Request):
         }
     )
 
+
+@app.get("/admin", response_class=HTMLResponse)
+@auth_required
+async def admin_page(request: Request):
+    user_profile = await get_user_profile(request)
+
+    if user_profile.get('type_user') not in ['admin', 'superadmin']:
+        return RedirectResponse(url="/dashboard", status_code=302)
+    
+    admin_content = get_page_content("admin")
+    
+    resources = list_available_css_js("admin")
+    
+    return templates.TemplateResponse(
+        "base.html", 
+        {
+            "request": request, 
+            "page": "admin",
+            "title": "Administração",
+            "page_content": admin_content,
+            "css_path": resources["css"],
+            "js_path": resources["js"],
+            "user": user_profile
+        }
+    )
+
 @app.get("/{path:path}", response_class=HTMLResponse)
 @auth_required
 async def generic_page(request: Request, path: str):

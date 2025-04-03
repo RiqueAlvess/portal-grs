@@ -1,0 +1,171 @@
+<div class="admin-container">
+    <div class="admin-header">
+      <h2>Painel de Administração</h2>
+      <p>Gerencie usuários e permissões de acesso</p>
+    </div>
+  
+    <div class="admin-actions">
+      <button id="btnAddUser" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+        Adicionar Usuário
+      </button>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar usuários..." class="search-input">
+        <button id="btnSearch" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </div>
+    </div>
+  
+    <div class="admin-content">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="usersTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Tipo</th>
+                  <th>Status</th>
+                  <th>Criado em</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr class="loading-row">
+                  <td colspan="6" class="text-center">Carregando usuários...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-pagination">
+            <button id="btnPrevPage" class="btn btn-sm btn-outline" disabled>Anterior</button>
+            <span id="paginationInfo">Página 1</span>
+            <button id="btnNextPage" class="btn btn-sm btn-outline">Próximo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div id="userModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Adicionar Usuário</h3>
+          <button class="close-btn" id="closeUserModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="userForm" class="form">
+            <input type="hidden" id="userId" name="userId">
+            
+            <div class="form-group">
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" name="nome" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="senha">Senha</label>
+              <input type="password" id="senha" name="senha" class="form-control">
+              <small class="form-text text-muted" id="passwordHelpText">Deixe em branco para manter a senha atual (ao editar).</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="typeUser">Tipo de Usuário</label>
+              <select id="typeUser" name="typeUser" class="form-control">
+                <option value="user">Usuário</option>
+                <option value="admin">Administrador</option>
+                <option value="superadmin">Super Administrador</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="active">Status</label>
+              <div class="toggle-container">
+                <input type="checkbox" id="active" name="active" class="toggle-input" checked>
+                <label for="active" class="toggle-label"></label>
+                <span id="activeStatus">Ativo</span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelUserBtn">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveUserBtn">Salvar</button>
+        </div>
+      </div>
+    </div>
+  
+    <div id="companiesModal" class="modal">
+      <div class="modal-content modal-lg">
+        <div class="modal-header">
+          <h3 id="companiesModalTitle">Gerenciar Empresas</h3>
+          <button class="close-btn" id="closeCompaniesModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="companies-container">
+            <div class="companies-search mb-4">
+              <input type="text" id="companySearchInput" placeholder="Filtrar empresas..." class="form-control">
+            </div>
+            
+            <div class="company-selection-container">
+              <div class="company-list-box">
+                <h4>Empresas Disponíveis</h4>
+                <div class="company-list-wrapper">
+                  <ul id="availableCompanies" class="company-list">
+                    
+                    <li class="loading-item">Carregando empresas...</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="company-transfer-buttons">
+                <button id="btnAddCompanies" class="btn btn-sm btn-arrow">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+                <button id="btnRemoveCompanies" class="btn btn-sm btn-arrow">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                </button>
+              </div>
+              
+              <div class="company-list-box">
+                <h4>Empresas Atribuídas</h4>
+                <div class="company-list-wrapper">
+                  <ul id="assignedCompanies" class="company-list">
+                    <!-- Empresas atribuídas serão carregadas aqui -->
+                    <li class="loading-item">Carregando empresas...</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelCompaniesBtn">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveCompaniesBtn">Salvar</button>
+        </div>
+      </div>
+    </div>
+  
+    <div id="confirmModal" class="modal">
+      <div class="modal-content modal-sm">
+        <div class="modal-header">
+          <h3 id="confirmModalTitle">Confirmação</h3>
+          <button class="close-btn" id="closeConfirmModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="confirmModalMessage">Tem certeza que deseja realizar esta ação?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelConfirmBtn">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmBtn">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  
+    <div id="toastContainer" class="toast-container"></div>
+  </div>
