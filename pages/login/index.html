@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal GRS - Login</title>
+  <link rel="stylesheet" href="/static/login/css/style.css">
+  <link rel="icon" href="/static/login/images/favicon.ico" type="image/x-icon">
+  <!-- Font Awesome para os ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <div class="limiter">
+    <div class="container-login">
+      <div class="wrap-login">
+        <div class="login-form-title">
+          <span class="login-form-title-1">
+            Portal GRS - Login
+          </span>
+        </div>
+
+        <form class="login-form" id="loginForm">
+          <div class="wrap-input" data-validate="Email obrigatório">
+            <span class="label-input">Email</span>
+            <div class="input-container">
+              <i class="fas fa-envelope icon"></i>
+              <input class="input" type="email" name="email" id="email" placeholder="Digite seu email">
+            </div>
+            <span class="focus-input"></span>
+          </div>
+
+          <div class="wrap-input" data-validate="Senha obrigatória">
+            <span class="label-input">Senha</span>
+            <div class="input-container">
+              <i class="fas fa-lock icon"></i>
+              <input class="input" type="password" name="senha" id="senha" placeholder="Digite sua senha">
+            </div>
+            <span class="focus-input"></span>
+          </div>
+
+          <div class="checkbox-container">
+            <div class="form-checkbox">
+              <input class="input-checkbox" id="remember" type="checkbox" name="remember">
+              <label class="label-checkbox" for="remember">
+                Lembrar-me
+              </label>
+            </div>
+
+            <div>
+              <a href="#" class="forgot-link">
+                Esqueceu a senha?
+              </a>
+            </div>
+          </div>
+
+          <div class="container-login-form-btn">
+            <button type="submit" class="login-form-btn">
+              Entrar
+            </button>
+          </div>
+          
+          <div class="register-link">
+            <span>Não tem uma conta?</span>
+            <a href="#" class="txt1">Registre-se</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/static/login/js/script.js"></script>
+</body>
+</html>

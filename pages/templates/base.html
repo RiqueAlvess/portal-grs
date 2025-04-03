@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ title or "Portal GRS" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="/templates/css/global.css">
+
+  {% if css_path %}
+    <link rel="stylesheet" href="{{ css_path }}">
+  {% endif %}
+</head>
+<body>
+  <div class="dashboard-container">
+    {% include "header.html" %}
+    <div class="dashboard-content">
+      {% include "sidebar.html" %}
+      <main class="main-content">
+        {% if page_content %}
+          {{ page_content|safe }}
+        {% else %}
+          <p>Nenhum conteúdo encontrado.</p>
+        {% endif %}
+      </main>
+    </div>
+  </div>
+
+  {% if js_path %}
+    <script src="{{ js_path }}"></script>
+  {% endif %}
+</body>
+</html>
