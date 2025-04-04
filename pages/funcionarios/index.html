@@ -1,302 +1,301 @@
 <div class="funcionarios-container">
-    <div class="funcionarios-header">
-      <h2>Gerenciamento de Funcionários</h2>
-      <p>Visualize e gerencie informações dos funcionários</p>
+  <div class="funcionarios-header">
+    <h2>Gerenciamento de Funcionários</h2>
+    <p>Visualize e gerencie informações dos funcionários</p>
+  </div>
+
+  <div class="funcionarios-actions">
+    <div class="filter-container">
+      <select id="unidadeFilter" class="filter-select">
+        <option value="">Todas as unidades</option>
+      </select>
+      <select id="setorFilter" class="filter-select">
+        <option value="">Todos os setores</option>
+      </select>
+      <select id="situacaoFilter" class="filter-select">
+        <option value="">Todas as situações</option>
+        <option value="Ativo">Ativos</option>
+        <option value="Inativo">Inativos</option>
+        <option value="Afastado">Afastados</option>
+        <option value="Férias">Férias</option>
+      </select>
     </div>
-  
-    <div class="funcionarios-actions">
-      <div class="filter-container">
-        <select id="empresaFilter" class="filter-select">
-          <option value="">Todas as empresas</option>
-        </select>
-        <select id="setorFilter" class="filter-select">
-          <option value="">Todos os setores</option>
-        </select>
-        <select id="situacaoFilter" class="filter-select">
-          <option value="">Todas as situações</option>
-          <option value="Ativo">Ativos</option>
-          <option value="Inativo">Inativos</option>
-          <option value="Afastado">Afastados</option>
-          <option value="Férias">Férias</option>
-        </select>
-      </div>
-      <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Buscar funcionários..." class="search-input">
-        <button id="btnSearch" class="btn btn-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-      </div>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Buscar funcionários..." class="search-input">
+      <button id="btnSearch" class="btn btn-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
     </div>
-  
-    <div class="funcionarios-content">
-      <div class="card">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table id="funcionariosTable" class="data-table">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>CPF</th>
-                  <th>Cargo</th>
-                  <th>Data Admissão</th>
-                  <th>Situação</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="funcionariosTableBody">
-                <tr class="loading-row">
-                  <td colspan="6" class="text-center">Carregando funcionários...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-pagination">
-            <button id="btnPrevPage" class="btn btn-sm btn-outline" disabled>Anterior</button>
-            <span id="paginationInfo">Página 1</span>
-            <button id="btnNextPage" class="btn btn-sm btn-outline">Próximo</button>
-          </div>
+  </div>
+
+  <div class="funcionarios-content">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="funcionariosTable" class="data-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Cargo</th>
+                <th>Data Admissão</th>
+                <th>Situação</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="funcionariosTableBody">
+              <tr class="loading-row">
+                <td colspan="6" class="text-center">Carregando funcionários...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-pagination">
+          <button id="btnPrevPage" class="btn btn-sm btn-outline" disabled>Anterior</button>
+          <span id="paginationInfo">Página 1</span>
+          <button id="btnNextPage" class="btn btn-sm btn-outline">Próximo</button>
         </div>
       </div>
     </div>
-  
-    <!-- Modal de Detalhes do Funcionário -->
-    <div id="funcionarioModal" class="modal">
-      <div class="modal-content modal-lg">
-        <div class="modal-header">
-          <h3 id="modalTitle">Detalhes do Funcionário</h3>
-          <button class="close-btn" id="closeModal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="funcionario-profile">
-            <div class="profile-header">
-              <div class="profile-avatar">
-                <span id="avatarInitials">JS</span>
-              </div>
-              <div class="profile-info">
-                <h3 id="profileNome">João da Silva</h3>
-                <span id="profileCargo">Analista de RH</span>
-                <span id="profileEmpresa">Empresa: GRS Tecnologia</span>
-              </div>
-              <div class="profile-status">
-                <span id="profileStatus" class="badge badge-active">Ativo</span>
-              </div>
+  </div>
+
+  <!-- Modal de Detalhes do Funcionário -->
+  <div id="funcionarioModal" class="modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3 id="modalTitle">Detalhes do Funcionário</h3>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="funcionario-profile">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <span id="avatarInitials">JS</span>
             </div>
-  
-            <div class="profile-tabs">
-              <div class="tabs-header">
-                <button class="tab-btn active" data-tab="pessoal">Informações Pessoais</button>
-                <button class="tab-btn" data-tab="profissional">Informações Profissionais</button>
-                <button class="tab-btn" data-tab="contato">Contato</button>
-                <button class="tab-btn" data-tab="documentos">Documentos</button>
+            <div class="profile-info">
+              <h3 id="profileNome">João da Silva</h3>
+              <span id="profileCargo">Analista de RH</span>
+              <span id="profileEmpresa">Empresa: GRS Tecnologia</span>
+            </div>
+            <div class="profile-status">
+              <span id="profileStatus" class="badge badge-active">Ativo</span>
+            </div>
+          </div>
+
+          <div class="profile-tabs">
+            <div class="tabs-header">
+              <button class="tab-btn active" data-tab="pessoal">Informações Pessoais</button>
+              <button class="tab-btn" data-tab="profissional">Informações Profissionais</button>
+              <button class="tab-btn" data-tab="contato">Contato</button>
+              <button class="tab-btn" data-tab="documentos">Documentos</button>
+            </div>
+            
+            <div class="tabs-content">
+              <!-- Tab: Informações Pessoais -->
+              <div class="tab-pane active" id="tabPessoal">
+                <div class="info-section">
+                  <div class="info-group">
+                    <div class="info-item">
+                      <span class="info-label">Nome Completo</span>
+                      <span class="info-value" id="infoNome">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Data de Nascimento</span>
+                      <span class="info-value" id="infoDataNascimento">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Sexo</span>
+                      <span class="info-value" id="infoSexo">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Estado Civil</span>
+                      <span class="info-value" id="infoEstadoCivil">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Nome da Mãe</span>
+                      <span class="info-value" id="infoNomeMae">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Naturalidade</span>
+                      <span class="info-value" id="infoNaturalidade">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Escolaridade</span>
+                      <span class="info-value" id="infoEscolaridade">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Deficiente</span>
+                      <span class="info-value" id="infoDeficiente">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Tipo de Deficiência</span>
+                      <span class="info-value" id="infoDeficiencia">-</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              <div class="tabs-content">
-                <!-- Tab: Informações Pessoais -->
-                <div class="tab-pane active" id="tabPessoal">
-                  <div class="info-section">
-                    <div class="info-group">
-                      <div class="info-item">
-                        <span class="info-label">Nome Completo</span>
-                        <span class="info-value" id="infoNome">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Data de Nascimento</span>
-                        <span class="info-value" id="infoDataNascimento">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Sexo</span>
-                        <span class="info-value" id="infoSexo">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Estado Civil</span>
-                        <span class="info-value" id="infoEstadoCivil">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Nome da Mãe</span>
-                        <span class="info-value" id="infoNomeMae">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Naturalidade</span>
-                        <span class="info-value" id="infoNaturalidade">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Escolaridade</span>
-                        <span class="info-value" id="infoEscolaridade">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Deficiente</span>
-                        <span class="info-value" id="infoDeficiente">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Tipo de Deficiência</span>
-                        <span class="info-value" id="infoDeficiencia">-</span>
-                      </div>
+              <!-- Tab: Informações Profissionais -->
+              <div class="tab-pane" id="tabProfissional">
+                <div class="info-section">
+                  <div class="info-group">
+                    <div class="info-item">
+                      <span class="info-label">Empresa</span>
+                      <span class="info-value" id="infoEmpresa">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Matrícula</span>
+                      <span class="info-value" id="infoMatricula">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Situação</span>
+                      <span class="info-value" id="infoSituacao">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Data de Admissão</span>
+                      <span class="info-value" id="infoDataAdmissao">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Data de Demissão</span>
+                      <span class="info-value" id="infoDataDemissao">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Cargo</span>
+                      <span class="info-value" id="infoCargo">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">CBO</span>
+                      <span class="info-value" id="infoCboCargo">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Unidade</span>
+                      <span class="info-value" id="infoUnidade">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Setor</span>
+                      <span class="info-value" id="infoSetor">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Centro de Custo</span>
+                      <span class="info-value" id="infoCentroCusto">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Tipo de Contratação</span>
+                      <span class="info-value" id="infoTipoContratacao">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Regime de Trabalho</span>
+                      <span class="info-value" id="infoRegimeTrabalho">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Turno de Trabalho</span>
+                      <span class="info-value" id="infoTurnoTrabalho">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Regime de Revezamento</span>
+                      <span class="info-value" id="infoRegimeRevezamento">-</span>
                     </div>
                   </div>
                 </div>
-                
-                <!-- Tab: Informações Profissionais -->
-                <div class="tab-pane" id="tabProfissional">
-                  <div class="info-section">
-                    <div class="info-group">
-                      <div class="info-item">
-                        <span class="info-label">Empresa</span>
-                        <span class="info-value" id="infoEmpresa">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Matrícula</span>
-                        <span class="info-value" id="infoMatricula">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Situação</span>
-                        <span class="info-value" id="infoSituacao">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Data de Admissão</span>
-                        <span class="info-value" id="infoDataAdmissao">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Data de Demissão</span>
-                        <span class="info-value" id="infoDataDemissao">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Cargo</span>
-                        <span class="info-value" id="infoCargo">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">CBO</span>
-                        <span class="info-value" id="infoCboCargo">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Unidade</span>
-                        <span class="info-value" id="infoUnidade">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Setor</span>
-                        <span class="info-value" id="infoSetor">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Centro de Custo</span>
-                        <span class="info-value" id="infoCentroCusto">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Tipo de Contratação</span>
-                        <span class="info-value" id="infoTipoContratacao">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Regime de Trabalho</span>
-                        <span class="info-value" id="infoRegimeTrabalho">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Turno de Trabalho</span>
-                        <span class="info-value" id="infoTurnoTrabalho">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Regime de Revezamento</span>
-                        <span class="info-value" id="infoRegimeRevezamento">-</span>
-                      </div>
+              </div>
+              
+              <!-- Tab: Contato -->
+              <div class="tab-pane" id="tabContato">
+                <div class="info-section">
+                  <div class="info-group">
+                    <h4>Endereço</h4>
+                    <div class="info-item">
+                      <span class="info-label">Logradouro</span>
+                      <span class="info-value" id="infoEndereco">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Número</span>
+                      <span class="info-value" id="infoNumeroEndereco">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Bairro</span>
+                      <span class="info-value" id="infoBairro">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Cidade</span>
+                      <span class="info-value" id="infoCidade">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">UF</span>
+                      <span class="info-value" id="infoUf">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">CEP</span>
+                      <span class="info-value" id="infoCep">-</span>
+                    </div>
+                  </div>
+                  
+                  <div class="info-group">
+                    <h4>Telefones</h4>
+                    <div class="info-item">
+                      <span class="info-label">Residencial</span>
+                      <span class="info-value" id="infoTelefoneResidencial">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Celular</span>
+                      <span class="info-value" id="infoTelefoneCelular">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Comercial</span>
+                      <span class="info-value" id="infoTelComercial">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Ramal</span>
+                      <span class="info-value" id="infoRamal">-</span>
+                    </div>
+                  </div>
+                  
+                  <div class="info-group">
+                    <h4>Email</h4>
+                    <div class="info-item">
+                      <span class="info-label">Email</span>
+                      <span class="info-value" id="infoEmail">-</span>
                     </div>
                   </div>
                 </div>
-                
-                <!-- Tab: Contato -->
-                <div class="tab-pane" id="tabContato">
-                  <div class="info-section">
-                    <div class="info-group">
-                      <h4>Endereço</h4>
-                      <div class="info-item">
-                        <span class="info-label">Logradouro</span>
-                        <span class="info-value" id="infoEndereco">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Número</span>
-                        <span class="info-value" id="infoNumeroEndereco">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Bairro</span>
-                        <span class="info-value" id="infoBairro">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Cidade</span>
-                        <span class="info-value" id="infoCidade">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">UF</span>
-                        <span class="info-value" id="infoUf">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">CEP</span>
-                        <span class="info-value" id="infoCep">-</span>
-                      </div>
+              </div>
+              
+              <!-- Tab: Documentos -->
+              <div class="tab-pane" id="tabDocumentos">
+                <div class="info-section">
+                  <div class="info-group">
+                    <h4>Documentos Pessoais</h4>
+                    <div class="info-item">
+                      <span class="info-label">CPF</span>
+                      <span class="info-value" id="infoCpf">-</span>
                     </div>
-                    
-                    <div class="info-group">
-                      <h4>Telefones</h4>
-                      <div class="info-item">
-                        <span class="info-label">Residencial</span>
-                        <span class="info-value" id="infoTelefoneResidencial">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Celular</span>
-                        <span class="info-value" id="infoTelefoneCelular">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Comercial</span>
-                        <span class="info-value" id="infoTelComercial">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Ramal</span>
-                        <span class="info-value" id="infoRamal">-</span>
-                      </div>
+                    <div class="info-item">
+                      <span class="info-label">RG</span>
+                      <span class="info-value" id="infoRg">-</span>
                     </div>
-                    
-                    <div class="info-group">
-                      <h4>Email</h4>
-                      <div class="info-item">
-                        <span class="info-label">Email</span>
-                        <span class="info-value" id="infoEmail">-</span>
-                      </div>
+                    <div class="info-item">
+                      <span class="info-label">Órgão Emissor</span>
+                      <span class="info-value" id="infoOrgaoEmissorRg">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">UF</span>
+                      <span class="info-value" id="infoUfRg">-</span>
                     </div>
                   </div>
-                </div>
-                
-                <!-- Tab: Documentos -->
-                <div class="tab-pane" id="tabDocumentos">
-                  <div class="info-section">
-                    <div class="info-group">
-                      <h4>Documentos Pessoais</h4>
-                      <div class="info-item">
-                        <span class="info-label">CPF</span>
-                        <span class="info-value" id="infoCpf">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">RG</span>
-                        <span class="info-value" id="infoRg">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Órgão Emissor</span>
-                        <span class="info-value" id="infoOrgaoEmissorRg">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">UF</span>
-                        <span class="info-value" id="infoUfRg">-</span>
-                      </div>
+                  
+                  <div class="info-group">
+                    <h4>Documentos Trabalhistas</h4>
+                    <div class="info-item">
+                      <span class="info-label">PIS</span>
+                      <span class="info-value" id="infoPis">-</span>
                     </div>
-                    
-                    <div class="info-group">
-                      <h4>Documentos Trabalhistas</h4>
-                      <div class="info-item">
-                        <span class="info-label">PIS</span>
-                        <span class="info-value" id="infoPis">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">CTPS</span>
-                        <span class="info-value" id="infoCtps">-</span>
-                      </div>
-                      <div class="info-item">
-                        <span class="info-label">Série CTPS</span>
-                        <span class="info-value" id="infoSerieCtps">-</span>
-                      </div>
+                    <div class="info-item">
+                      <span class="info-label">CTPS</span>
+                      <span class="info-value" id="infoCtps">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Série CTPS</span>
+                      <span class="info-value" id="infoSerieCtps">-</span>
                     </div>
                   </div>
                 </div>
@@ -304,11 +303,12 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="closeModalBtn">Fechar</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeModalBtn">Fechar</button>
       </div>
     </div>
-  
-    <div id="toastContainer" class="toast-container"></div>
   </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+</div>

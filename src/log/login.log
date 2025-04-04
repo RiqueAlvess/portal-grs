@@ -5,3 +5,5 @@
 [2025-04-04 02:31:06,430] ERROR - Erro ao decodificar token: Signature has expired.
 [2025-04-04 02:31:06,430] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
 [2025-04-04 02:31:18,964] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-04 02:56:12,983] INFO - Login bem-sucedido para: programador@grsnucleo.com.br
+[2025-04-04 02:56:12,983] INFO - Login bem-sucedido para: programador@grsnucleo.com.br

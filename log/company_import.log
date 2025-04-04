@@ -1,0 +1,30 @@
+[2025-04-03 09:33:03,510] INFO - Company import job started at 2025-04-03 09:33:03.510859
+[2025-04-03 09:33:03,511] INFO - Fetching company data from API: https://ws1.soc.com.br/WebSoc/exportadados?parametro=%7B%22empresa%22%3A%22423%22%2C%22codigo%22%3A%2226625%22%2C%22chave%22%3A%227e9da216f3bfda8c024b%22%2C%22tipoSaida%22%3A%22json%22%7D
+[2025-04-03 09:33:04,747] INFO - API response type: <class 'list'>
+[2025-04-03 09:33:04,749] INFO - API response is a list with 612 items
+[2025-04-03 09:33:04,749] INFO - First item sample keys: ['CODIGO', 'NOMEABREVIADO', 'RAZAOSOCIALINICIAL', 'RAZAOSOCIAL', 'ENDERECO']
+[2025-04-03 09:33:04,770] INFO - Processed 253 active companies from 612 total
+[2025-04-03 09:33:04,770] ERROR - Missing DATABASE_URL in environment variables
+[2025-04-03 09:33:04,771] ERROR - Import failed: DATABASE_URL not configured
+[2025-04-03 09:36:56,245] INFO - Loading environment from /home/henrique/Área de trabalho/PortalGRS/.env
+[2025-04-03 09:36:56,246] INFO - Using database URL: postgresql://***:***@teste_portal_user:t1EVtzf3jvSnSLzLZKGFbhkrqhQylPhv@dpg-cvmk02gdl3ps738edg4g-a.oregon-postgres.render.com/teste_portal
+[2025-04-03 09:36:56,246] INFO - Company import job started at 2025-04-03 09:36:56.246236
+[2025-04-03 09:36:56,246] INFO - Fetching company data from API: https://ws1.soc.com.br/WebSoc/exportadados?parametro=%7B%22empresa%22%3A%22423%22%2C%22codigo%22%3A%2226625%22%2C%22chave%22%3A%227e9da216f3bfda8c024b%22%2C%22tipoSaida%22%3A%22json%22%7D
+[2025-04-03 09:36:57,490] INFO - API response type: <class 'list'>
+[2025-04-03 09:36:57,491] INFO - API response is a list with 612 items
+[2025-04-03 09:36:57,491] INFO - First item sample keys: ['CODIGO', 'NOMEABREVIADO', 'RAZAOSOCIALINICIAL', 'RAZAOSOCIAL', 'ENDERECO']
+[2025-04-03 09:36:57,500] INFO - Processed 253 active companies from 612 total
+[2025-04-03 09:36:57,501] INFO - Connecting to database...
+[2025-04-03 09:37:29,604] INFO - Database update completed: 253 inserted, 0 updated, 0 errors
+[2025-04-03 09:37:29,605] INFO - Import completed successfully in 33.36 seconds
+[2025-04-03 12:23:36,271] INFO - Loading environment from /home/henrique/Área de trabalho/PortalGRS/.env
+[2025-04-03 12:23:36,341] INFO - Using database URL: postgresql://***:***@teste_portal_user:t1EVtzf3jvSnSLzLZKGFbhkrqhQylPhv@dpg-cvmk02gdl3ps738edg4g-a.oregon-postgres.render.com/teste_portal
+[2025-04-03 12:23:36,341] INFO - Company import job started at 2025-04-03 12:23:36.341816
+[2025-04-03 12:23:36,342] INFO - Fetching company data from API: https://ws1.soc.com.br/WebSoc/exportadados?parametro=%7B%22empresa%22%3A%22423%22%2C%22codigo%22%3A%2226625%22%2C%22chave%22%3A%227e9da216f3bfda8c024b%22%2C%22tipoSaida%22%3A%22json%22%7D
+[2025-04-03 12:23:37,442] INFO - API response type: <class 'list'>
+[2025-04-03 12:23:37,443] INFO - API response is a list with 612 items
+[2025-04-03 12:23:37,443] INFO - First item sample keys: ['CODIGO', 'NOMEABREVIADO', 'RAZAOSOCIALINICIAL', 'RAZAOSOCIAL', 'ENDERECO']
+[2025-04-03 12:23:37,451] INFO - Processed 253 active companies from 612 total
+[2025-04-03 12:23:37,451] INFO - Connecting to database...
+[2025-04-03 12:24:09,851] INFO - Database update completed: 0 inserted, 253 updated, 0 errors
+[2025-04-03 12:24:09,852] INFO - Import completed successfully in 33.51 seconds
