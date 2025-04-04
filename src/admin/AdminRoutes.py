@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import cast, String
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, EmailStr, Field
 from uuid import UUID, uuid4
@@ -59,6 +60,7 @@ class CompanyListResponse(BaseModel):
 class UserCompanyAssignment(BaseModel):
     company_ids: List[UUID]
 
+# User management endpoints
 @router.get("/users", response_model=UserListResponse)
 async def get_users(
     skip: int = 0, 
@@ -110,13 +112,16 @@ async def create_user(
     if current_user.type_user not in ["admin", "superadmin"]:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
     
+    # Only superadmin can create admin users
     if user_data.type_user == "admin" and current_user.type_user != "superadmin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas superadmins podem criar usuários admin")
-
+    
+    # Check if email already exists
     existing_user = db.query(Usuario).filter(Usuario.email == user_data.email).first()
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email já cadastrado")
-
+    
+    # Hash the password (using passlib.hash.bcrypt)
     from passlib.hash import bcrypt
     hashed_password = bcrypt.hash(user_data.senha)
     
@@ -154,22 +159,26 @@ async def update_user(
     user = db.query(Usuario).filter(Usuario.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
-  
+    
+    # Only superadmin can modify admin users or change user type
     if (user.type_user == "admin" or user_data.type_user == "admin") and current_user.type_user != "superadmin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permissão insuficiente")
-
+    
+    # Check if email already exists (if changing email)
     if user_data.email != user.email:
         existing_user = db.query(Usuario).filter(Usuario.email == user_data.email).first()
         if existing_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email já cadastrado")
-
+    
+    # Update fields
     user.nome = user_data.nome
     user.email = user_data.email
     user.type_user = user_data.type_user
     user.active = user_data.active
     user.dt_last_updt = datetime.utcnow()
     user.user_updt = current_user.id
- 
+    
+    # Update password if provided
     if user_data.senha:
         from passlib.hash import bcrypt
         user.senha = bcrypt.hash(user_data.senha)
@@ -195,15 +204,19 @@ async def delete_user(
     user = db.query(Usuario).filter(Usuario.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
- 
+    
+    # Prevent deleting yourself
     if user.id == current_user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Não é possível excluir seu próprio usuário")
     
+    # Only superadmin can delete admin users
     if user.type_user == "admin" and current_user.type_user != "superadmin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas superadmins podem excluir usuários admin")
     
     try:
+        # Check if user has companies associated
         if user.empresas:
+            # Remove all company associations
             for empresa in user.empresas:
                 empresa.usuario_id = None
         
@@ -215,6 +228,7 @@ async def delete_user(
         db.rollback()
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Erro ao excluir usuário: {str(e)}")
 
+# Company management endpoints
 @router.get("/companies", response_model=CompanyListResponse)
 async def get_companies(
     skip: int = 0, 
@@ -223,6 +237,12 @@ async def get_companies(
     current_user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    """
+    Get a paginated list of companies.
+    
+    - Set limit=1000 to get a larger list of companies at once
+    - Use search parameter to filter by name or code
+    """
     if current_user.type_user not in ["admin", "superadmin"]:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
     
@@ -231,10 +251,15 @@ async def get_companies(
     if search:
         query = query.filter(
             (Empresa.nome_abreviado.ilike(f"%{search}%")) | 
-            (Empresa.razao_social.ilike(f"%{search}%"))
+            (Empresa.razao_social.ilike(f"%{search}%")) |
+            (cast(Empresa.codigo, String).ilike(f"%{search}%"))
         )
     
+    # Count total before applying pagination
     total = query.count()
+    
+    # Apply pagination - use a higher limit if requested
+    limit = min(limit, 1000)  # Cap at 1000 for performance reasons
     companies = query.offset(skip).limit(limit).all()
     
     return {
@@ -272,10 +297,12 @@ async def assign_companies(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
     
     try:
+        # First, remove all existing company associations
         companies = db.query(Empresa).filter(Empresa.usuario_id == user_id).all()
         for company in companies:
             company.usuario_id = None
         
+        # Then, add new company associations
         for company_id in assignment.company_ids:
             company = db.query(Empresa).filter(Empresa.id == company_id).first()
             if company:

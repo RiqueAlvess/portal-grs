@@ -158,27 +158,55 @@ document.addEventListener('DOMContentLoaded', function() {
   
     async function loadCompanies() {
       try {
-        const response = await fetch(`${window.location.origin}/api/admin/companies`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          },
-          credentials: 'include'
-        });
+        state.companies = [];
+        let page = 0;
+        let hasMoreData = true;
+        const pageSize = 100;
         
-        if (response.ok) {
-          const data = await response.json();
-          state.companies = data.items;
-          state.filteredCompanies = [...state.companies];
-        } else {
-          handleApiError(response);
+
+        elements.availableCompanies.innerHTML = '<li class="loading-item">Carregando empresas...</li>';
+        
+        while (hasMoreData) {
+          const skip = page * pageSize;
+          const url = new URL(`${window.location.origin}/api/admin/companies`);
+          url.searchParams.append('skip', skip);
+          url.searchParams.append('limit', pageSize);
+          
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json'
+            },
+            credentials: 'include'
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            
+            state.companies = [...state.companies, ...data.items];
+
+            hasMoreData = data.items.length === pageSize;
+            page++;
+            
+            if (hasMoreData) {
+              elements.availableCompanies.innerHTML = `<li class="loading-item">Carregando empresas... (${state.companies.length} de ~${Math.max(data.total, state.companies.length)})</li>`;
+            }
+          } else {
+            handleApiError(response);
+            hasMoreData = false;
+          }
         }
+        
+        state.filteredCompanies = [...state.companies];
+        
+        logger.info(`Total de ${state.companies.length} empresas carregadas`);
       } catch (error) {
         showToast('Erro ao carregar empresas', 'error');
         console.error('Erro ao carregar empresas:', error);
       }
     }
-  
+
+
     async function loadUserCompanies(userId) {
       try {
         const response = await fetch(`${window.location.origin}/api/admin/users/${userId}/companies`, {
@@ -553,6 +581,8 @@ document.addEventListener('DOMContentLoaded', function() {
       renderCompanyLists();
     }
     
+
+    
     function filterCompanies() {
       const searchTerm = elements.companySearchInput.value.toLowerCase();
       
@@ -569,6 +599,8 @@ document.addEventListener('DOMContentLoaded', function() {
       renderCompanyLists();
     }
     
+
+
     async function saveCompanyAssignments() {
       if (!state.selectedUser) {
         showToast('Erro: Usuário não selecionado', 'error');
