@@ -150,11 +150,12 @@
       }
     }
   </style>
-  
-  <!-- CSS específico da página -->
+
   {% if css_path %}
   <link rel="stylesheet" href="{{ css_path }}">
   {% endif %}
+
+  <script src="{{ BASE_DIR }}/templates/js/ContextCompany.js"></script>
 </head>
 <body>
   <div class="dashboard-container">
@@ -170,6 +171,21 @@
       </main>
     </div>
   </div>
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+      window.companyContext.init();
+      
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+          window.companyContext.createCompanyBanner(mainContent);
+        }
+      }
+    });
+  </script>
 
   {% if js_path %}
     <script src="{{ js_path }}"></script>
