@@ -2,13 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Estado da aplicação
   const state = {
     funcionarios: [],
-    unidades: [],
-    setores: [],
-    filteredFuncionarios: [],
     selectedFuncionario: null,
     filters: {
-      unidade: '',
-      setor: '',
       situacao: '',
       search: ''
     },
@@ -16,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
       currentPage: 1,
       totalPages: 1,
       limit: 10,
-      total: 0 // Total de registros para melhor controle
+      total: 0
     },
-    loading: false // Indicador de carregamento
+    loading: false
   };
 
   // Elementos DOM
@@ -35,8 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Busca e filtros
     searchInput: document.getElementById('searchInput'),
     btnSearch: document.getElementById('btnSearch'),
-    unidadeFilter: document.getElementById('unidadeFilter'),
-    setorFilter: document.getElementById('setorFilter'),
     situacaoFilter: document.getElementById('situacaoFilter'),
     
     // Modal de detalhes
@@ -126,87 +119,71 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function setupEventListeners() {
-    // Paginação - CORRIGINDO EVENTOS
+    // Paginação - Implementação simplificada
     if (elements.btnPrevPage) {
-      elements.btnPrevPage.addEventListener('click', function(event) {
-        event.preventDefault(); // Impedir comportamento padrão
-        console.log('Clique em Página Anterior');
-        prevPage();
-      });
+      elements.btnPrevPage.onclick = function(e) {
+        e.preventDefault();
+        if (state.pagination.currentPage > 1) {
+          state.pagination.currentPage--;
+          loadFuncionarios();
+        }
+      };
     }
     
     if (elements.btnNextPage) {
-      elements.btnNextPage.addEventListener('click', function(event) {
-        event.preventDefault(); // Impedir comportamento padrão
-        console.log('Clique em Próxima Página');
-        nextPage();
-      });
+      elements.btnNextPage.onclick = function(e) {
+        e.preventDefault();
+        if (state.pagination.currentPage < state.pagination.totalPages) {
+          state.pagination.currentPage++;
+          loadFuncionarios();
+        }
+      };
     }
     
     // Busca
     if (elements.btnSearch) {
-      elements.btnSearch.addEventListener('click', () => {
+      elements.btnSearch.addEventListener('click', function() {
         state.filters.search = elements.searchInput.value;
-        applyFilters();
+        state.pagination.currentPage = 1; // Reset para primeira página ao buscar
+        loadFuncionarios();
       });
     }
     
     if (elements.searchInput) {
-      elements.searchInput.addEventListener('keypress', (e) => {
+      elements.searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
           state.filters.search = elements.searchInput.value;
-          applyFilters();
+          state.pagination.currentPage = 1; // Reset para primeira página ao buscar
+          loadFuncionarios();
         }
       });
     }
     
-    // Filtros
-    if (elements.unidadeFilter) {
-      elements.unidadeFilter.addEventListener('change', () => {
-        state.filters.unidade = elements.unidadeFilter.value;
-        
-        // Atualizar filtro de setores baseado na unidade selecionada
-        if (state.filters.unidade) {
-          loadSetores(state.filters.unidade);
-        } else {
-          // Reset do filtro de setores
-          populateSetoresFilter([]);
-        }
-        
-        applyFilters();
-      });
-    }
-    
-    if (elements.setorFilter) {
-      elements.setorFilter.addEventListener('change', () => {
-        state.filters.setor = elements.setorFilter.value;
-        applyFilters();
-      });
-    }
-    
+    // Filtro de situação
     if (elements.situacaoFilter) {
-      elements.situacaoFilter.addEventListener('change', () => {
+      elements.situacaoFilter.addEventListener('change', function() {
         state.filters.situacao = elements.situacaoFilter.value;
-        applyFilters();
+        state.pagination.currentPage = 1; // Reset para primeira página ao filtrar
+        loadFuncionarios();
       });
     }
     
     // Modal de detalhes
     if (elements.closeModal) {
-      elements.closeModal.addEventListener('click', () => {
+      elements.closeModal.addEventListener('click', function() {
         hideModal(elements.funcionarioModal);
       });
     }
     
     if (elements.closeModalBtn) {
-      elements.closeModalBtn.addEventListener('click', () => {
+      elements.closeModalBtn.addEventListener('click', function() {
         hideModal(elements.funcionarioModal);
       });
     }
     
     // Fechar modal ao clicar fora dele
     if (elements.funcionarioModal) {
-      elements.funcionarioModal.addEventListener('click', (event) => {
+      elements.funcionarioModal.addEventListener('click', function(event) {
         if (event.target === elements.funcionarioModal) {
           hideModal(elements.funcionarioModal);
         }
@@ -224,9 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Funções de carregamento de dados - CORREÇÃO DA PAGINAÇÃO
-  async function loadFuncionarios(applyingFilters = false) {
-    // Evitar múltiplas requisições simultâneas
+  // Função simplificada para carregar funcionários - usando 'page' em vez de 'skip'
+  async function loadFuncionarios() {
     if (state.loading) {
       console.log('Já existe um carregamento em andamento, ignorando requisição');
       return;
@@ -242,26 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
         </tr>
       `;
       
-      // Calcular skip com base na página atual
-      const skip = (state.pagination.currentPage - 1) * state.pagination.limit;
-      
-      // Log para diagnóstico
-      console.log(`Carregando funcionários: página ${state.pagination.currentPage}, skip=${skip}, limit=${state.pagination.limit}`);
-      
+      // Construir URL com parâmetros - usando page em vez de skip
       const url = new URL(`${window.location.origin}/api/funcionarios`);
       
-      url.searchParams.append('skip', skip);
+      // Adicionar parâmetros de paginação
+      url.searchParams.append('page', state.pagination.currentPage);
       url.searchParams.append('limit', state.pagination.limit);
       
       // Adicionar filtros à URL
-      if (state.filters.unidade) {
-        url.searchParams.append('unidade', state.filters.unidade);
-      }
-      
-      if (state.filters.setor) {
-        url.searchParams.append('setor', state.filters.setor);
-      }
-      
       if (state.filters.situacao) {
         url.searchParams.append('situacao', state.filters.situacao);
       }
@@ -270,39 +234,48 @@ document.addEventListener('DOMContentLoaded', function() {
         url.searchParams.append('search', state.filters.search);
       }
       
-      // Log da URL para diagnóstico
-      console.log('URL da requisição:', url.toString());
+      // Timestamp para evitar cache
+      url.searchParams.append('_t', Date.now());
+      
+      console.log('Buscando funcionários:', url.toString());
       
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Cache-Control': 'no-cache' // Evitar cache
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         },
         credentials: 'include'
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Log dos dados recebidos
-        console.log(`Dados recebidos: ${data.items ? data.items.length : 0} funcionários, total: ${data.total || 0}`);
-        
-        // Atualizar estado
-        state.funcionarios = data.items || [];
-        state.filteredFuncionarios = [...state.funcionarios];
-        state.pagination.total = data.total || 0;
-        state.pagination.totalPages = Math.max(1, Math.ceil(state.pagination.total / state.pagination.limit));
-        
-        // Renderizar e atualizar interface
-        renderFuncionarios();
-        updatePagination();
-      } else {
-        handleApiError(response);
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
       }
+      
+      const data = await response.json();
+      
+      // Log dos dados recebidos
+      console.log(`Recebidos ${data.items.length} funcionários de ${data.total} total`);
+      console.log('Metadados da resposta:', {
+        page: data.page,
+        limit: data.limit,
+        pages: data.pages
+      });
+      
+      // Atualizar estado
+      state.funcionarios = data.items || [];
+      state.pagination.total = data.total || 0;
+      state.pagination.currentPage = data.page || 1;
+      state.pagination.totalPages = data.pages || 1;
+      
+      // Renderizar dados e atualizar UI
+      renderFuncionarios();
+      updatePagination();
     } catch (error) {
       console.error('Erro ao carregar funcionários:', error);
-      showToast('Erro ao carregar funcionários', 'error');
+      showToast('Erro ao carregar funcionários: ' + error.message, 'error');
       
       // Em caso de erro, limpar a tabela
       elements.funcionariosTableBody.innerHTML = `
@@ -315,138 +288,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  async function loadUnidades() {
-    try {
-      const response = await fetch(`${window.location.origin}/api/empresas`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        },
-        credentials: 'include'
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        state.unidades = data.items;
-        
-        // Preencher o select de unidades
-        populateUnidadesFilter(state.unidades);
-      } else {
-        // Silenciosamente falha
-        console.log('Não foi possível carregar unidades');
-        
-        // Extrair unidades dos funcionários como fallback
-        extractUnidadesFromFuncionarios();
-      }
-    } catch (error) {
-      console.error('Erro ao carregar unidades:', error);
-      
-      // Fallback
-      extractUnidadesFromFuncionarios();
-    }
-  }
-  
-  // Função para extrair unidades dos funcionários já carregados (fallback)
-  function extractUnidadesFromFuncionarios() {
-    if (state.funcionarios.length === 0) {
-      return;
-    }
-    
-    // Extrair unidades únicas dos funcionários
-    const uniqueUnidades = new Map();
-    
-    state.funcionarios.forEach(funcionario => {
-      if (funcionario.nome_unidade && funcionario.codigo_unidade) {
-        uniqueUnidades.set(funcionario.codigo_unidade, {
-          codigo: funcionario.codigo_unidade,
-          nome: funcionario.nome_unidade
-        });
-      }
-    });
-    
-    state.unidades = Array.from(uniqueUnidades.values());
-    populateUnidadesFilter(state.unidades);
-  }
-
-  async function loadSetores(unidadeCodigo) {
-    try {
-      const response = await fetch(`${window.location.origin}/api/setores?unidade=${unidadeCodigo}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        },
-        credentials: 'include'
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        state.setores = data;
-        
-        // Preencher o select de setores
-        populateSetoresFilter(state.setores);
-      } else {
-        // Silenciosamente falha, usar fallback
-        extractSetoresFromFuncionarios(unidadeCodigo);
-      }
-    } catch (error) {
-      console.error('Erro ao carregar setores:', error);
-      
-      // Fallback
-      extractSetoresFromFuncionarios(unidadeCodigo);
-    }
-  }
-  
-  // Função para extrair setores dos funcionários (fallback)
-  function extractSetoresFromFuncionarios(unidadeCodigo = null) {
-    if (state.funcionarios.length === 0) {
-      return;
-    }
-    
-    // Extrair setores únicos dos funcionários
-    const uniqueSetores = new Map();
-    
-    state.funcionarios.forEach(funcionario => {
-      // Se unidadeCodigo for fornecido, filtre apenas os setores dessa unidade
-      if (unidadeCodigo && funcionario.codigo_unidade !== unidadeCodigo) {
-        return;
-      }
-      
-      if (funcionario.nome_setor && funcionario.codigo_setor) {
-        uniqueSetores.set(funcionario.codigo_setor, {
-          codigo: funcionario.codigo_setor,
-          nome: funcionario.nome_setor
-        });
-      }
-    });
-    
-    state.setores = Array.from(uniqueSetores.values());
-    populateSetoresFilter(state.setores);
-  }
-
   async function loadFuncionarioDetails(funcionarioId) {
     try {
-      const response = await fetch(`${window.location.origin}/api/funcionarios/${funcionarioId}`, {
+      const response = await fetch(`${window.location.origin}/api/funcionarios/${funcionarioId}?_t=${Date.now()}`, {
         method: 'GET',
         headers: {
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         credentials: 'include'
       });
       
-      if (response.ok) {
-        const funcionario = await response.json();
-        state.selectedFuncionario = funcionario;
-        
-        renderFuncionarioDetails(funcionario);
-        showModal(elements.funcionarioModal);
-        
-        // Garantir que a primeira aba seja ativada
-        switchTab('pessoal');
-      } else {
-        handleApiError(response);
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
       }
+      
+      const funcionario = await response.json();
+      state.selectedFuncionario = funcionario;
+      
+      renderFuncionarioDetails(funcionario);
+      showModal(elements.funcionarioModal);
+      
+      // Garantir que a primeira aba seja ativada
+      switchTab('pessoal');
     } catch (error) {
-      showToast('Erro ao carregar detalhes do funcionário', 'error');
+      showToast('Erro ao carregar detalhes do funcionário: ' + error.message, 'error');
       console.error('Erro ao carregar detalhes do funcionário:', error);
     }
   }
@@ -492,8 +358,8 @@ document.addEventListener('DOMContentLoaded', function() {
       // Garantir que o event listener seja adicionado corretamente
       const detailsBtn = row.querySelector('.btn-details');
       if (detailsBtn) {
-        detailsBtn.addEventListener('click', () => {
-          const id = detailsBtn.getAttribute('data-id');
+        detailsBtn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
           if (id) loadFuncionarioDetails(id);
         });
       }
@@ -574,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateElement('infoSerieCtps', funcionario.serie_ctps);
   }
 
-  // CORREÇÃO DA PAGINAÇÃO - Atualização da UI
+  // Função para atualizar paginação
   function updatePagination() {
     if (elements.paginationInfo) {
       elements.paginationInfo.textContent = `Página ${state.pagination.currentPage} de ${state.pagination.totalPages}`;
@@ -588,77 +454,23 @@ document.addEventListener('DOMContentLoaded', function() {
       elements.btnNextPage.disabled = state.pagination.currentPage >= state.pagination.totalPages;
     }
     
-    // Log para diagnóstico
     console.log(`Paginação atualizada: Página ${state.pagination.currentPage}/${state.pagination.totalPages}, Total: ${state.pagination.total}`);
-  }
-
-  function populateUnidadesFilter(unidades) {
-    if (!elements.unidadeFilter) return;
-    
-    // Manter a opção padrão
-    elements.unidadeFilter.innerHTML = '<option value="">Todas as unidades</option>';
-    
-    if (!unidades || unidades.length === 0) return;
-    
-    // Ordenar unidades pelo nome para melhor usabilidade
-    const sortedUnidades = [...unidades].sort((a, b) => {
-      return (a.nome || '').localeCompare(b.nome || '');
-    });
-    
-    // Adicionar as unidades ao select
-    sortedUnidades.forEach(unidade => {
-      if (unidade && unidade.codigo && unidade.nome) {
-        const option = document.createElement('option');
-        option.value = unidade.codigo;
-        option.textContent = unidade.nome;
-        elements.unidadeFilter.appendChild(option);
-      }
-    });
-  }
-
-  function populateSetoresFilter(setores) {
-    if (!elements.setorFilter) return;
-    
-    // Manter a opção padrão
-    elements.setorFilter.innerHTML = '<option value="">Todos os setores</option>';
-    
-    if (!setores || setores.length === 0) return;
-    
-    // Ordenar setores pelo nome para melhor usabilidade
-    const sortedSetores = [...setores].sort((a, b) => {
-      return (a.nome || '').localeCompare(b.nome || '');
-    });
-    
-    // Adicionar os setores ao select
-    sortedSetores.forEach(setor => {
-      if (setor && setor.codigo && setor.nome) {
-        const option = document.createElement('option');
-        option.value = setor.codigo;
-        option.textContent = setor.nome;
-        elements.setorFilter.appendChild(option);
-      }
-    });
   }
 
   // Funções de manipulação de modais
   function showModal(modal) {
-    // Verificar se o modal existe
     if (!modal) return;
-    
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden'; // Evita rolagem no fundo
   }
   
   function hideModal(modal) {
-    // Verificar se o modal existe
     if (!modal) return;
-    
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
   }
   
   function switchTab(tabId) {
-    // Garantir que tabId existe
     if (!tabId) return;
     
     // Desativar todas as abas
@@ -676,43 +488,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (selectedButton) selectedButton.classList.add('active');
     if (selectedPane) selectedPane.classList.add('active');
-  }
-
-  // CORREÇÃO DA PAGINAÇÃO - Funções de navegação
-  function prevPage() {
-    if (state.pagination.currentPage > 1) {
-      state.pagination.currentPage--;
-      
-      // Log para diagnóstico
-      console.log(`Navegando para página anterior: ${state.pagination.currentPage}`);
-      
-      // Carregar dados da nova página
-      loadFuncionarios(true);
-    }
-  }
-  
-  function nextPage() {
-    if (state.pagination.currentPage < state.pagination.totalPages) {
-      state.pagination.currentPage++;
-      
-      // Log para diagnóstico
-      console.log(`Navegando para próxima página: ${state.pagination.currentPage}`);
-      
-      // Carregar dados da nova página
-      loadFuncionarios(true);
-    }
-  }
-  
-  // Funções de filtro
-  function applyFilters() {
-    // Reset da paginação
-    state.pagination.currentPage = 1;
-    
-    // Log para diagnóstico
-    console.log(`Aplicando filtros:`, state.filters);
-    
-    // Recarregar funcionários com os novos filtros
-    loadFuncionarios(true);
   }
 
   // Funções auxiliares
@@ -766,32 +541,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Formatar como xxx.xxx.xxx-xx
     return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  }
-  
-  async function handleApiError(response) {
-    let errorMessage = 'Ocorreu um erro na operação';
-    
-    try {
-      // Verificar content-type antes de tentar parsear JSON
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json();
-        if (errorData.detail) {
-          errorMessage = errorData.detail;
-        }
-      } else {
-        errorMessage = `Erro ${response.status}: ${response.statusText}`;
-      }
-    } catch (e) {
-      errorMessage = `Erro ${response.status}: ${response.statusText}`;
-    }
-    
-    // Só mostrar toast se não for erro relacionado a empresas (evitar mensagem desnecessária)
-    if (!errorMessage.toLowerCase().includes('empresa')) {
-      showToast(errorMessage, 'error');
-    } else {
-      console.log(errorMessage); // Log sem mostrar toast
-    }
   }
   
   function showToast(message, type = 'info') {

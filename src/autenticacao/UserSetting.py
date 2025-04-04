@@ -140,7 +140,6 @@ def get_empresa_ativa(request: Request, db: Session) -> Optional[Empresa]:
         logger.error(f"Erro ao buscar empresa ativa: {str(e)}")
         return None
 
-# Endpoint para obter a empresa atual selecionada
 @router.get("/current-company", response_model=Dict[str, Any])
 async def get_current_company(
     request: Request,
@@ -150,30 +149,34 @@ async def get_current_company(
     empresa = get_empresa_ativa(request, db)
     
     if not empresa:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Nenhuma empresa selecionada"
-        )
-    
-    # Verificar se o usuário tem acesso à empresa (exceto para admin/superadmin)
-    if current_user.type_user not in ["admin", "superadmin"]:
-        user_company_ids = [str(c.id) for c in current_user.empresas]
-        if str(empresa.id) not in user_company_ids:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Você não tem acesso a esta empresa"
+
+        if current_user.type_user in ["admin", "superadmin"]:
+            empresa = db.query(Empresa).filter(Empresa.ativo == True).order_by(Empresa.nome_abreviado).first()
+        else:
+            empresa = current_user.empresas[0] if current_user.empresas else None
+
+        if empresa:
+
+            Response.set_cookie(
+                key="selected_company",
+                value=str(empresa.id),
+                max_age=30 * 24 * 60 * 60,
+                path="/",
+                httponly=True,
+                samesite="lax"
             )
-    
-    # Converter explicitamente UUID para string
-    return {
-        "id": str(empresa.id),
-        "codigo": empresa.codigo,
-        "nome_abreviado": empresa.nome_abreviado,
-        "razao_social": empresa.razao_social,
-        "cnpj": empresa.cnpj,
-        "cidade": empresa.cidade,
-        "uf": empresa.uf
-    }
+        else:
+            raise HTTPException(status_code=404, detail="Usuário sem empresas associadas")
+        
+        return {
+            "id": str(empresa.id),
+            "codigo": empresa.codigo,
+            "nome_abreviado": empresa.nome_abreviado,
+            "razao_social": empresa.razao_social,
+            "cnpj": empresa.cnpj,
+            "cidade": empresa.cidade,
+            "uf": empresa.uf
+        }
 
 # Endpoint para selecionar uma empresa
 @router.post("/select-company", status_code=status.HTTP_200_OK)

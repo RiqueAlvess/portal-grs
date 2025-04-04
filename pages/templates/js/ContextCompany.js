@@ -5,6 +5,12 @@
  * conhecer qual é a empresa atual selecionada pelo usuário.
  */
 
+await fetch("/api/user/current-company", {
+  method: "GET",
+  credentials: "include"
+});
+
+
 class CompanyContext {
   constructor() {
     this.company = null;

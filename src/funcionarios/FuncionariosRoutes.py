@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import distinct
-from typing import List, Dict, Any, Optional
+from sqlalchemy import func, text
+from typing import Dict, Any, Optional
 import logging
+import math
 
 from models.FuncionariosSchema import Funcionario
 from models.UsuariosSchema import Usuario
@@ -18,86 +19,72 @@ router = APIRouter(prefix="/api")
 @router.get("/funcionarios", response_model=Dict[str, Any])
 async def list_funcionarios(
     request: Request,
-    skip: int = 0,
-    limit: int = 10,  # Padrão de 10 para coincidir com o frontend
+    page: int = Query(1, ge=1, description="Número da página"),
+    limit: int = Query(10, ge=1, le=100, description="Itens por página"),
     search: Optional[str] = None,
-    unidade: Optional[str] = None,
-    setor: Optional[str] = None,
     situacao: Optional[str] = None,
     current_user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Lista funcionários com paginação e diversos filtros.
-    - skip: Quantos registros pular (para paginação)
-    - limit: Quantos registros retornar por página
-    - search: Busca por nome, CPF ou matrícula
-    - unidade: Filtra por código de unidade
-    - setor: Filtra por código de setor
-    - situacao: Filtra por situação (Ativo, Inativo, etc.)
+    Lista funcionários com paginação simplificada.
     """
     try:
         # Log de diagnóstico
-        logger.info(f"Requisição de funcionários: skip={skip}, limit={limit}, filtros={search}, {unidade}, {setor}, {situacao}")
+        logger.info(f"Requisição recebida: page={page}, limit={limit}, situacao={situacao}, search={search}")
         
         # Obter empresa ativa
         empresa_ativa = obter_empresa_ativa(request, db, current_user)
         
         if not empresa_ativa:
-            # Se não há empresa selecionada, retornar lista vazia
+            logger.warning("Nenhuma empresa selecionada")
             return {
                 "items": [],
                 "total": 0,
-                "empresa_selecionada": None
+                "page": page,
+                "limit": limit,
+                "pages": 0
             }
 
-        # Verificar acesso à empresa (só para garantir)
+        # Verificar acesso à empresa
         empresa_id = str(empresa_ativa.id)
         verificar_acesso_empresa(current_user, empresa_id, db)
         
-        # Filtrar funcionários pela empresa
+        # Calcular offset baseado na página
+        offset = (page - 1) * limit
+        
+        # Construir a consulta base
         query = db.query(Funcionario).filter(
             Funcionario.codigo_empresa == empresa_ativa.codigo
         )
         
-        # Adicionar filtro de unidade, se fornecido
-        if unidade:
-            query = query.filter(Funcionario.codigo_unidade == unidade)
-        
-        # Adicionar filtro de setor, se fornecido
-        if setor:
-            query = query.filter(Funcionario.codigo_setor == setor)
-        
-        # Adicionar filtro de situação, se fornecido
+        # Aplicar filtro de situação, se fornecido
         if situacao:
             query = query.filter(Funcionario.situacao.ilike(f"%{situacao}%"))
         
-        # Adicionar filtro de busca, se fornecido
+        # Aplicar filtro de busca, se fornecido
         if search:
-            search = f"%{search}%"
+            search_term = f"%{search}%"
             query = query.filter(
-                (Funcionario.nome.ilike(search)) |
-                (Funcionario.cpf.ilike(search)) |
-                (Funcionario.matricula_funcionario.ilike(search))
+                (Funcionario.nome.ilike(search_term)) |
+                (Funcionario.cpf.ilike(search_term)) |
+                (Funcionario.matricula_funcionario.ilike(search_term))
             )
         
-        # Contar total antes de aplicar paginação
+        # Contar total de registros
         total = query.count()
         
-        # Aplicar ordenação padrão
+        # Ordenação e paginação
         query = query.order_by(Funcionario.nome)
+        funcionarios = query.offset(offset).limit(limit).all()
         
-        # Validar e corrigir parâmetros de paginação
-        skip = max(0, skip)  # Garantir que skip não seja negativo
-        limit = min(100, max(1, limit))  # Limitar entre 1 e 100
+        # Log dos registros recuperados
+        logger.info(f"Recuperados {len(funcionarios)} registros de {total} total")
         
-        # Aplicar paginação
-        funcionarios = query.offset(skip).limit(limit).all()
+        # Calcular número total de páginas
+        total_pages = math.ceil(total / limit) if total > 0 else 0
         
-        # Log de resultado
-        logger.info(f"Retornando {len(funcionarios)} funcionários de {total} total")
-        
-        # Converter os resultados para JSON, convertendo UUIDs para strings
+        # Converter os resultados para dicionários
         items = []
         for funcionario in funcionarios:
             items.append({
@@ -119,9 +106,13 @@ async def list_funcionarios(
                 "data_demissao": funcionario.data_demissao.isoformat() if funcionario.data_demissao else None
             })
         
+        # Construir resposta com metadados de paginação
         return {
             "items": items,
             "total": total,
+            "page": page,
+            "limit": limit,
+            "pages": total_pages,
             "empresa_selecionada": {
                 "id": str(empresa_ativa.id),
                 "codigo": empresa_ativa.codigo,
@@ -129,8 +120,6 @@ async def list_funcionarios(
             }
         }
         
-    except HTTPException:
-        raise
     except Exception as e:
         logger.error(f"Erro ao listar funcionários: {str(e)}")
         raise HTTPException(
@@ -147,7 +136,6 @@ async def get_funcionario(
 ):
     """
     Obtém os detalhes de um funcionário específico.
-    Verifica se o funcionário pertence à empresa que o usuário tem acesso.
     """
     try:
         # Obter empresa ativa
@@ -175,7 +163,7 @@ async def get_funcionario(
                 detail="Este funcionário não pertence à empresa selecionada"
             )
         
-        # Converter para dicionário, transformando UUIDs em strings
+        # Converter para dicionário
         result = {
             "id": str(funcionario.id),
             "nome": funcionario.nome,
