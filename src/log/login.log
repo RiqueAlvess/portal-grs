@@ -64,3 +64,37 @@
 [2025-04-03 17:39:47,175] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
 [2025-04-03 17:39:58,007] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
 [2025-04-03 17:39:58,007] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:17:29,621] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:17:29,621] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:17:29,622] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:17:29,622] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:17:29,736] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:17:29,736] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:17:29,736] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:17:29,736] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:17:30,009] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:17:30,009] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:17:30,013] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:17:30,013] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:17:40,860] WARNING - Senha incorreta para o e-mail: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:17:40,860] WARNING - Senha incorreta para o e-mail: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:17:46,045] WARNING - Senha incorreta para o e-mail: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:17:46,045] WARNING - Senha incorreta para o e-mail: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:17:51,551] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:17:51,551] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:23:35,413] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:23:35,413] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:49:40,101] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:49:40,101] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:49:40,101] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:49:40,101] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:49:40,184] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:49:40,184] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:49:40,185] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:49:40,185] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:49:40,595] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:49:40,595] ERROR - Erro ao decodificar token: Signature has expired.
+[2025-04-03 18:49:40,596] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:49:40,596] WARNING - Falha na verificação de autenticação: 401: Token inválido ou expirado
+[2025-04-03 18:49:50,731] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br
+[2025-04-03 18:49:50,731] INFO - Login bem-sucedido para: henrique.siqueira@grsnucleo.com.br

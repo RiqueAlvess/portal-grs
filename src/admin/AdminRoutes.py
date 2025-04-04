@@ -232,7 +232,7 @@ async def delete_user(
 @router.get("/companies", response_model=CompanyListResponse)
 async def get_companies(
     skip: int = 0, 
-    limit: int = 100, 
+    limit: int = 1000, 
     search: Optional[str] = None,
     current_user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -259,7 +259,7 @@ async def get_companies(
     total = query.count()
     
     # Apply pagination - use a higher limit if requested
-    limit = min(limit, 1000)  # Cap at 1000 for performance reasons
+    limit = min(limit, 1000)  
     companies = query.offset(skip).limit(limit).all()
     
     return {
